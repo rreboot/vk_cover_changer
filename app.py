@@ -33,17 +33,14 @@ def request_to_api(method, pars):
 
 
 def main_loop():
-    print(ACCESS_TOKEN)
     parameters = {'group_id': GROUP_ID,
                   'sort': 'time_desc',
                   'count': 1,
                   'fields': 'photo_200',
                   'v': API_VERSION,
-                  'access_token': ACCESS_TOKEN+'s'
+                  'access_token': ACCESS_TOKEN,
                   }
     response = request_to_api('groups.getMembers', parameters)
-
-    print(response)
 
     first_name = response['response']['items'][0]['first_name']
     last_name = response['response']['items'][0]['last_name']
@@ -93,7 +90,7 @@ def main_loop():
 
 
 if __name__ == '__main__':
-    # while True:
-    #     main_loop()
-    #     time.sleep(60)
-    main_loop()
+    while True:
+        main_loop()
+        time.sleep(60)
+
