@@ -6,14 +6,23 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+ERROR_CODES = {
+    1: 'UNKNOWN ERROR',
+    2: 'APPLICATION NOT STARTED',
+    3: 'UNKNOWN METHOD',
+    4: 'BAD SIGN',
+    5: 'INVALID TOKEN',
+    6: 'TOO MANY REQUESTS PER SECOND',
+    7: 'PERMISSION DENIED',
+    8: 'INVALID REQUEST',
+    9: 'FLOOD CONTROL',
+    10: 'INTERNAL SERVER ERROR',
+    14: 'CAPTCHA NEEDED',
+}
+
+
 with open('token') as f:
     ACCESS_TOKEN = f.read().strip()
-
-# import pdb
-# pdb.set_trace()
-
-print(ACCESS_TOKEN)
-
 
 API_VERSION = '5.92'
 GROUP_ID = '164254021'
@@ -24,14 +33,17 @@ def request_to_api(method, pars):
 
 
 def main_loop():
+    print(ACCESS_TOKEN)
     parameters = {'group_id': GROUP_ID,
                   'sort': 'time_desc',
                   'count': 1,
                   'fields': 'photo_200',
                   'v': API_VERSION,
-                  'access_token': ACCESS_TOKEN
+                  'access_token': ACCESS_TOKEN+'s'
                   }
     response = request_to_api('groups.getMembers', parameters)
+
+    print(response)
 
     first_name = response['response']['items'][0]['first_name']
     last_name = response['response']['items'][0]['last_name']
@@ -81,7 +93,7 @@ def main_loop():
 
 
 if __name__ == '__main__':
-    while True:
-        main_loop()
-        time.sleep(60)
-
+    # while True:
+    #     main_loop()
+    #     time.sleep(60)
+    main_loop()
