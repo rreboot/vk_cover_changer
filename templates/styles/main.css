@@ -1,0 +1,62 @@
+@font-face {
+    font-family: "Lato bold";
+    src: url("Lato-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Lato";
+    src: url("Lato-Regular.ttf");
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-image: url("../images/background.png");
+    width: 1590px;
+    height: 400px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.info {
+    flex-direction: column;
+    margin-right: 200px;
+    margin-top: 90px;
+}
+
+.info_text {
+    font-family: "Lato bold";
+    font-size: 46px;
+    color: white;
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.user_name {
+    flex-grow: 1;
+    font-family: "Lato";
+    font-size: 50px;
+    color: white;
+    text-align: right;
+    padding-right: 35px;
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+
+}
+
+.avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-position: center;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 1.0);
+
+}
