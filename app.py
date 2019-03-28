@@ -20,7 +20,6 @@ ERROR_CODES = {
     14: 'CAPTCHA NEEDED',
 }
 
-
 with open('token') as f:
     ACCESS_TOKEN = f.read().strip()
 
@@ -32,65 +31,62 @@ def request_to_api(method, pars):
     return requests.post('https://api.vk.com/method/{}'.format(method), params=pars).json()
 
 
-def main_loop():
-    parameters = {'group_id': GROUP_ID,
-                  'sort': 'time_desc',
-                  'count': 1,
-                  'fields': 'photo_200',
-                  'v': API_VERSION,
-                  'access_token': ACCESS_TOKEN,
-                  }
-    response = request_to_api('groups.getMembers', parameters)
+def get_user_data():
+    response = request_to_api('groups.getMembers', {'group_id': GROUP_ID,
+                                                    'sort': 'time_desc',
+                                                    'count': 1,
+                                                    'fields': 'photo_200',
+                                                    'v': API_VERSION,
+                                                    'access_token': ACCESS_TOKEN,
+                                                    })
 
     first_name = response['response']['items'][0]['first_name']
     last_name = response['response']['items'][0]['last_name']
     photo = response['response']['items'][0]['photo_200']
+    return [first_name, last_name, photo]
 
-    # converter
 
+def convert_html_to_image():
     with open('templates/index.html', 'r') as f:
         template = Template(f.read())
 
-    tmp = template.render(first_name=first_name,
-                          last_name=last_name,
-                          avatar=photo)
+    pars = get_user_data()
+
+    tmp = template.render(first_name=pars[0],
+                          last_name=pars[1],
+                          avatar=pars[2])
 
     with open('templates/index_tmp.html', 'w') as f:
         f.write(tmp)
 
-    imgkit.from_file('templates/index_tmp.html', 'out.png')
+    imgkit.from_file('templates/index_tmp.html', 'out.jpg')
 
-    # загрузка обложки
 
-    parameters = {'group_id': GROUP_ID,
-                  'v': API_VERSION,
-                  'access_token': ACCESS_TOKEN,
-                  'crop_x': 0,
-                  'crop_y': 0,
-                  'crop_x2': 1590,
-                  'crop_y2': 400
-                  }
-    response = request_to_api('photos.getOwnerCoverPhotoUploadServer', parameters)
+def send_data():
+    response = request_to_api('photos.getOwnerCoverPhotoUploadServer', {'group_id': GROUP_ID,
+                                                                        'v': API_VERSION,
+                                                                        'access_token': ACCESS_TOKEN,
+                                                                        'crop_x': 0,
+                                                                        'crop_y': 0,
+                                                                        'crop_x2': 1590,
+                                                                        'crop_y2': 400
+                                                                        })
 
     upload_url = response['response']['upload_url']
-    image_file = {'file': open('out.png', 'rb')}
+    image_file = {'file': open('out.jpg', 'rb')}
 
     response = requests.post(upload_url, files=image_file).json()
 
-    upload_hash = response['hash']
-    photo = response['photo']
-
-    parameters = {
-        'hash': upload_hash,
-        'photo': photo,
-        'access_token': ACCESS_TOKEN,
-        'v': API_VERSION}
-    response = request_to_api('photos.saveOwnerCoverPhoto', parameters)
+    response = request_to_api('photos.saveOwnerCoverPhoto', {'hash': response['hash'],
+                                                             'photo': response['photo'],
+                                                             'access_token': ACCESS_TOKEN,
+                                                             'v': API_VERSION})
     print(response)
 
 
 if __name__ == '__main__':
     while True:
-        main_loop()
+        get_user_data()
+        convert_html_to_image()
+        send_data()
         time.sleep(60)
-
