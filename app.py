@@ -6,19 +6,19 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-ERROR_CODES = {
-    1: 'UNKNOWN ERROR',
-    2: 'APPLICATION NOT STARTED',
-    3: 'UNKNOWN METHOD',
-    4: 'BAD SIGN',
-    5: 'INVALID TOKEN',
-    6: 'TOO MANY REQUESTS PER SECOND',
-    7: 'PERMISSION DENIED',
-    8: 'INVALID REQUEST',
-    9: 'FLOOD CONTROL',
-    10: 'INTERNAL SERVER ERROR',
-    14: 'CAPTCHA NEEDED',
-}
+# ERROR_CODES = {
+#     1: 'UNKNOWN ERROR',
+#     2: 'APPLICATION NOT STARTED',
+#     3: 'UNKNOWN METHOD',
+#     4: 'BAD SIGN',
+#     5: 'INVALID TOKEN',
+#     6: 'TOO MANY REQUESTS PER SECOND',
+#     7: 'PERMISSION DENIED',
+#     8: 'INVALID REQUEST',
+#     9: 'FLOOD CONTROL',
+#     10: 'INTERNAL SERVER ERROR',
+#     14: 'CAPTCHA NEEDED',
+# }
 
 with open('token') as f:
     ACCESS_TOKEN = f.read().strip()
